@@ -8,6 +8,7 @@ setup:
 	go get github.com/urfave/cli
 	go get github.com/fatih/color
 	go get github.com/Songmu/make2help/cmd/make2help
+	go get gopkg.in/vmihailenco/msgpack.v2
 
 ## Run tests
 test: setup

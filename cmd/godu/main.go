@@ -18,6 +18,8 @@ func main() {
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{Name: "recursive, r", Usage: "calculate disk usage recursively"},
 		cli.BoolFlag{Name: "absolute, a", Usage: "show result using absolute path"},
+		cli.BoolFlag{Name: "dump, d", Usage: "dump resutl as message pack binary"},
+		cli.BoolFlag{Name: "load, l", Usage: "load resutl stored as message pack binary"},
 	}
 
 	app.Action = func(c *cli.Context) error {
@@ -28,12 +30,14 @@ func main() {
 		}
 
 		targetPath = c.Args().Get(0)
-		godu.Run(targetPath,
+		err := godu.Run(targetPath,
 			c.Bool("recursive"),
 			c.Bool("absolute"),
+			c.Bool("dump"),
+			c.Bool("load"),
 		)
 
-		return nil
+		return err
 	}
 
 	app.Run(os.Args)

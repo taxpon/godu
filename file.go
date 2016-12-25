@@ -6,6 +6,12 @@ import (
 	"path/filepath"
 )
 
+type PrintableRecord interface {
+	HSize() int64
+	Size() int64
+	RelativePath() string
+}
+
 // File is abstracted file object
 type File struct {
 	path    string
@@ -23,8 +29,8 @@ func (f *File) Name() string {
 	return f.info.Name()
 }
 
-// FullPath returns the absolute path of File
-func (f *File) FullPath() string {
+// RelativePath returns the relative path of File
+func (f *File) RelativePath() string {
 	return filepath.Join(f.path, f.info.Name())
 }
 
