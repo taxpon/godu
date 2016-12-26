@@ -6,8 +6,9 @@ import (
 	"path/filepath"
 )
 
+// PrintableRecord is an interface for print du records
 type PrintableRecord interface {
-	HSize() int64
+	HSize() string
 	Size() int64
 	RelativePath() string
 }
