@@ -13,7 +13,7 @@ import (
 )
 
 // Run runs godu main logic
-func Run(path string, recursive bool, absolute bool, dumpFlg bool, loadFlg bool) error {
+func Run(path string, recursive bool, absolute bool, dumpFlg bool) error {
 	items, size := Scan(path, recursive)
 
 	cwd, err := os.Getwd()
@@ -27,7 +27,7 @@ func Run(path string, recursive bool, absolute bool, dumpFlg bool, loadFlg bool)
 	}
 
 	if dumpFlg {
-		dd, err := getDumpDir()
+		dd, err := getArchivesDir()
 		if err != nil {
 			return err
 		}
@@ -36,15 +36,6 @@ func Run(path string, recursive bool, absolute bool, dumpFlg bool, loadFlg bool)
 		if err != nil {
 			return err
 		}
-	}
-
-	if loadFlg {
-		dd, err := getDumpDir()
-		if err != nil {
-			return err
-		}
-		err = loadAndPrint(filepath.Join(dd, "dump.bin"))
-		return err
 	}
 
 	records := make([]PrintableRecord, len(items))
@@ -56,13 +47,42 @@ func Run(path string, recursive bool, absolute bool, dumpFlg bool, loadFlg bool)
 	return nil
 }
 
-func getDumpDir() (string, error) {
+// Load loads saved file and display the information to stdout
+func Load(listFlg bool, filename string) error {
+	dd, err := getArchivesDir()
+	if err != nil {
+		return err
+	}
+
+	if listFlg {
+		f, err := os.Open(dd)
+		if err != nil {
+			fmt.Errorf("%s", err)
+		}
+		defer f.Close()
+
+		fileInfoList, err := f.Readdir(0)
+		if err != nil {
+			return err
+		}
+
+		for _, fileInfo := range fileInfoList {
+			fmt.Println(fileInfo.Name())
+		}
+		return nil
+	}
+
+	err = loadAndPrint(filepath.Join(dd, filename))
+	return err
+}
+
+func getArchivesDir() (string, error) {
 	home := os.Getenv("HOME")
 	if home == "" && runtime.GOOS == "windows" {
 		home = os.Getenv("APPDATA")
 	}
 
-	dir := filepath.Join(home, ".config", "godu")
+	dir := filepath.Join(home, ".config", "godu", "archives")
 	_, err := os.Stat(dir)
 
 	if err != nil {

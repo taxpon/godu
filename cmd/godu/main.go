@@ -22,6 +22,35 @@ func main() {
 		cli.BoolFlag{Name: "load, l", Usage: "load resutl stored as message pack binary"},
 	}
 
+	app.Commands = []cli.Command{
+		{
+			Name:    "load",
+			Aliases: []string{"l"},
+			Usage:   "load saved usage information",
+			Flags: []cli.Flag{
+				cli.BoolFlag{
+					Name:  "list, l",
+					Usage: "list all saved file",
+				},
+				cli.StringFlag{
+					Name:  "input, i",
+					Value: "dump.bin",
+					Usage: "input file to load",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				err := godu.Load(
+					c.Bool("list"),
+					c.String("input"),
+				)
+				if err != nil {
+					return err
+				}
+				return nil
+			},
+		},
+	}
+
 	app.Action = func(c *cli.Context) error {
 		targetPath := ""
 		if c.NArg() == 0 {
@@ -34,7 +63,6 @@ func main() {
 			c.Bool("recursive"),
 			c.Bool("absolute"),
 			c.Bool("dump"),
-			c.Bool("load"),
 		)
 
 		return err
