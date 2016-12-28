@@ -10,6 +10,7 @@ import (
 
 	"github.com/fatih/color"
 	msgpack "gopkg.in/vmihailenco/msgpack.v2"
+	"time"
 )
 
 // Run runs godu main logic
@@ -32,7 +33,8 @@ func Run(path string, recursive bool, absolute bool, dumpFlg bool) error {
 			return err
 		}
 
-		err = dumpRecords(cwdAbsPath, filepath.Join(dd, "dump.bin"), items)
+		filename := time.Now().UTC().Format("20060102150405.bin")
+		err = dumpRecords(cwdAbsPath, filepath.Join(dd, filename), items)
 		if err != nil {
 			return err
 		}
@@ -42,7 +44,12 @@ func Run(path string, recursive bool, absolute bool, dumpFlg bool) error {
 	for i, record := range items {
 		records[i] = record
 	}
-	printRecord(records, cwdAbsPath)
+	if absolute {
+		printRecord(records, cwdAbsPath)
+	} else {
+		printRecord(records, "")
+	}
+
 	fmt.Printf("Total size is %v byte.\n", size)
 	return nil
 }
