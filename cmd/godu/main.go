@@ -16,13 +16,27 @@ func main() {
 	app.Compiled = time.Now()
 
 	app.Flags = []cli.Flag{
-		cli.BoolFlag{Name: "recursive, r", Usage: "calculate disk usage recursively"},
-		cli.BoolFlag{Name: "absolute, a", Usage: "show result using absolute path"},
-		cli.BoolFlag{Name: "dump, d", Usage: "dump resutl as message pack binary"},
-		cli.BoolFlag{Name: "load, l", Usage: "load resutl stored as message pack binary"},
+		cli.BoolFlag{
+			Name: "recursive, r",
+			Usage: "calculate disk usage recursively"},
+		cli.BoolFlag{
+			Name: "absolute, a",
+			Usage: "show result using absolute path"},
+		cli.BoolFlag{
+			Name: "dump, d",
+			Usage: "dump resutl as message pack binary"},
 	}
 
 	app.Commands = []cli.Command{
+		{
+			Name: "compare",
+			Aliases: []string{"c"},
+			Usage: "compare 2 archived data",
+			Action: func(c *cli.Context) error {
+				err := godu.Compare(c.Args().Get(0), c.Args().Get(1))
+				return err
+			},
+		},
 		{
 			Name:    "load",
 			Aliases: []string{"l"},
