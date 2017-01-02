@@ -83,6 +83,53 @@ func Load(listFlg bool, filename string) error {
 	return err
 }
 
+// Compare compares 2 archived data and show diff result
+func Compare(dumpFileName1 string, dumpFileName2 string) error {
+	dd, err := getArchivesDir()
+	if err != nil {
+		return err
+	}
+
+	df1, err := loadRecords(filepath.Join(dd, dumpFileName1))
+	if err != nil {
+		return err
+	}
+
+	df2, err := loadRecords(filepath.Join(dd, dumpFileName2))
+	if err != nil {
+		return err
+	}
+
+	cm1 := df1.BuildCompareMap()
+	cm2 := df2.BuildCompareMap()
+	cr := cm1.Compare(cm2)
+
+	if len(cr.New) > 0 {
+		fmt.Println("New:")
+		for _, r := range cr.New {
+			r.PrintRecord()
+		}
+		fmt.Println("")
+	}
+
+	if len(cr.Updated) > 0 {
+		fmt.Println("Updated:")
+		for _, r := range cr.Updated {
+			r.PrintRecord()
+		}
+		fmt.Println("")
+	}
+
+	if len(cr.Deleted) > 0 {
+		fmt.Println("Deleted:")
+		for _, r := range cr.Deleted {
+			r.PrintRecord()
+		}
+	}
+
+	return nil
+}
+
 func getArchivesDir() (string, error) {
 	home := os.Getenv("HOME")
 	if home == "" && runtime.GOOS == "windows" {
