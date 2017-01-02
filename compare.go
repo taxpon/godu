@@ -23,7 +23,7 @@ type CompareResultRecord struct {
 
 // CompareResult ...
 type CompareResult struct {
-	New []CompareResultRecord
+	New     []CompareResultRecord
 	Updated []CompareResultRecord
 	Deleted []CompareResultRecord
 }
@@ -64,33 +64,33 @@ func (c *CompareMap) Compare(other *CompareMap) *CompareResult {
 
 func (cr *CompareResult) addNewFile(path string, size int64) {
 	cr.New = append(cr.New, CompareResultRecord{
-		Path: path,
+		Path:       path,
 		BeforeSize: 0,
-		AfterSize: size,
+		AfterSize:  size,
 		RecordType: created,
 	})
 }
 
 func (cr *CompareResult) addUpdatedFile(path string, beforeSize int64, afterSize int64) {
 	cr.Updated = append(cr.Updated, CompareResultRecord{
-		Path: path,
+		Path:       path,
 		BeforeSize: beforeSize,
-		AfterSize: afterSize,
+		AfterSize:  afterSize,
 		RecordType: updated,
 	})
 }
 
 func (cr *CompareResult) addDeletedFile(path string, size int64) {
 	cr.Deleted = append(cr.Updated, CompareResultRecord{
-		Path: path,
+		Path:       path,
 		BeforeSize: size,
-		AfterSize: 0,
+		AfterSize:  0,
 		RecordType: deleted,
 	})
 }
 
 // PrintRecord ...
-func (crr *CompareResultRecord) PrintRecord () {
+func (crr *CompareResultRecord) PrintRecord() {
 	switch crr.RecordType {
 	case created:
 		fmt.Printf("  %s (+%v)\n", crr.Path, crr.AfterSize)

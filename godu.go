@@ -130,7 +130,6 @@ func Compare(dumpFileName1 string, dumpFileName2 string) error {
 	return nil
 }
 
-
 func getArchivesDir() (string, error) {
 	home := os.Getenv("HOME")
 	if home == "" && runtime.GOOS == "windows" {

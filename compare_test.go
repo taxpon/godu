@@ -1,14 +1,13 @@
 package godu_test
 
 import (
-	"testing"
 	"github.com/taxpon/godu"
+	"testing"
 )
 
 func TestCompareMap_GetValue(t *testing.T) {
 
 }
-
 
 func TestCompareMap_CompareNew(t *testing.T) {
 	c1 := &godu.CompareMap{
@@ -18,8 +17,7 @@ func TestCompareMap_CompareNew(t *testing.T) {
 	}
 
 	c2 := &godu.CompareMap{
-		Map: map[string]int64{
-		},
+		Map: map[string]int64{},
 	}
 
 	cr := c1.Compare(c2)
@@ -73,8 +71,7 @@ func TestCompareMap_CompareUpdated(t *testing.T) {
 
 func TestCompareMap_CompareDeleted(t *testing.T) {
 	c1 := &godu.CompareMap{
-		Map: map[string]int64{
-		},
+		Map: map[string]int64{},
 	}
 
 	c2 := &godu.CompareMap{
